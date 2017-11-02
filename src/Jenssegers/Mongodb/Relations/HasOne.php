@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne as EloquentHasOne;
 
 class HasOne extends EloquentHasOne
 {
+    use HasOneOrManyTrait;
+    
     /**
      * Get the key for comparing against the parent key in "has" query.
      *
