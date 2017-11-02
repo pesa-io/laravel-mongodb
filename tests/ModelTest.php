@@ -2,7 +2,7 @@
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
-use Jenssegers\Mongodb\Eloquent\Model;
+use Pesa\Mongodb\Eloquent\Model;
 use MongoDB\BSON\ObjectID;
 use MongoDB\BSON\UTCDateTime;
 
@@ -20,7 +20,7 @@ class ModelTest extends TestCase
     {
         $user = new User;
         $this->assertInstanceOf(Model::class, $user);
-        $this->assertInstanceOf('Jenssegers\Mongodb\Connection', $user->getConnection());
+        $this->assertInstanceOf('Pesa\Mongodb\Connection', $user->getConnection());
         $this->assertEquals(false, $user->exists);
         $this->assertEquals('users', $user->getTable());
         $this->assertEquals('_id', $user->getKeyName());

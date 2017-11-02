@@ -1,15 +1,13 @@
 {
-    "name": "jenssegers/mongodb",
+    "name": "pesa/mongodb",
     "description": "A MongoDB based Eloquent model and Query builder for Laravel (Moloquent)",
-    "keywords": ["laravel","eloquent","mongodb","mongo","database","model","moloquent"],
-    "homepage": "https://github.com/jenssegers/laravel-mongodb",
-    "authors": [
-        {
-            "name": "Jens Segers",
-            "homepage": "https://jenssegers.com"
-        }
-    ],
-    "license" : "MIT",
+    "keywords": ["laravel", "eloquent", "mongodb", "mongo", "database", "model", "moloquent"],
+    "homepage": "https://github.com/pesa-io/laravel-mongodb",
+    "authors": [{
+        "name": "Jens Segers",
+        "homepage": "https://pesa.io"
+    }],
+    "license": "MIT",
     "require": {
         "illuminate/support": "^5.1",
         "illuminate/container": "^5.1",
@@ -25,7 +23,7 @@
     },
     "autoload": {
         "psr-0": {
-            "Jenssegers\\Mongodb": "src/"
+            "Pesa\\Mongodb": "src/"
         }
     },
     "autoload-dev": {
@@ -42,8 +40,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Jenssegers\\Mongodb\\MongodbServiceProvider",
-                "Jenssegers\\Mongodb\\MongodbQueueServiceProvider"
+                "Pesa\\Mongodb\\MongodbServiceProvider",
+                "Pesa\\Mongodb\\MongodbQueueServiceProvider"
             ]
         }
     }

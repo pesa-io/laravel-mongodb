@@ -1,6 +1,6 @@
 <?php
 
-use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
+use Pesa\Mongodb\Eloquent\Model as Eloquent;
 
 class Book extends Eloquent
 {
