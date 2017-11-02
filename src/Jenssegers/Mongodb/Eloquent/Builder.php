@@ -145,6 +145,71 @@ class Builder extends EloquentBuilder
 
     /**
      * @inheritdoc
+     * Add the "has" condition where clause to the query.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $hasQuery
+     * @param  \Illuminate\Database\Eloquent\Relations\Relation  $relation
+     * @param  string  $operator
+     * @param  int  $count
+     * @param  string  $boolean
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function addHasWhere(EloquentBuilder $hasQuery, Relation $relation, $operator, $count, $boolean)
+    {
+        $query = $hasQuery->getQuery();
+
+        // Get the number of related objects for each possible parent.
+        $relations = $query->pluck($relation->getHasCompareKey());
+        $relations = array_map(function ($id) {
+            return (string) $id;
+        }, is_array($relations) ? $relations : $relations->toArray());
+        $relationCount = array_count_values($relations);
+
+        // Remove unwanted related objects based on the operator and count.
+        $relationCount = array_filter($relationCount, function ($counted) use ($count, $operator) {
+            // If we are comparing to 0, we always need all results.
+            if ($count == 0) {
+                return true;
+            }
+
+            switch ($operator) {
+                case '>=':
+                case '<':
+                    return $counted >= $count;
+                case '>':
+                case '<=':
+                    return $counted > $count;
+                case '=':
+                case '!=':
+                    return $counted == $count;
+            }
+        });
+
+        // If the operator is <, <= or !=, we will use whereNotIn.
+        $not = in_array($operator, ['<', '<=', '!=']);
+
+        // If we are comparing to 0, we need an additional $not flip.
+        if ($count == 0) {
+            $not = !$not;
+        }
+
+        // All related ids.
+        $relatedIds = array_map(function ($id) use ($relation) {
+            $relationModel = $relation->getRelated();
+            $relationModel->setRelationCast($relation->getHasCompareKey());
+            if ($relationModel->useMongoId()
+                && $relationModel->hasCast($relation->getHasCompareKey(), null, 'set')) {
+                $id = $relationModel->castAttribute($relation->getHasCompareKey(), $id, 'set');
+            }
+            return $id;
+        }, array_keys($relationCount));
+
+        // Add whereIn to the query.
+        return $this->whereIn($this->model->getKeyName(), $relatedIds, $boolean, $not);
+    }
+
+    /**
+     * @inheritdoc
      */
     public function raw($expression = null)
     {

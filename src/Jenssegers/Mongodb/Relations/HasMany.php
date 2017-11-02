@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany as EloquentHasMany;
 
 class HasMany extends EloquentHasMany
 {
+    use HasOneOrManyTrait;
+    
     /**
      * Get the plain foreign key.
      *
